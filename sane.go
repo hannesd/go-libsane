@@ -7,6 +7,9 @@ package sane
 // #cgo LDFLAGS: -lsane
 // #include <stdlib.h>
 // #include <sane/sane.h>
+// void *handle_to_voidptr(SANE_Handle handle) {
+//   return handle;
+// }
 import "C"
 
 import (
@@ -276,6 +279,10 @@ func Open(name string) (*Conn, error) {
 		return nil, mkError(s)
 	}
 	return &Conn{name, h, nil}, nil
+}
+
+func (c *Conn) GetHandle() unsafe.Pointer {
+	return C.handle_to_voidptr(c.handle)
 }
 
 // Start initiates the acquisition of a frame.
